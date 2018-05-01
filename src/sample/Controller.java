@@ -1,15 +1,17 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
 public class Controller {
+
+    @FXML
+    Label outputLabel;
 
     @FXML
     TableView<Product> table;
@@ -42,7 +44,6 @@ public class Controller {
     public void addButtonClicked() {
         Product product = new Product();
         product.setName(nameInput.getText());
-        System.out.println(nameInput.getText());
         product.setPrice(Double.parseDouble(priceInput.getText()));
         product.setQuantity(Integer.parseInt(quantityInput.getText()));
         table.getItems().add(product);
@@ -65,6 +66,18 @@ public class Controller {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        table.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends Product> observable, Product oldValue, Product newValue) -> {
+                    outputLabel.setText("This line is " + newValue);
+                }
+        );
+//        table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Product> observable, Product oldValue, Product newValue) {
+//                outputLabel.setText(oldValue + " -> " + newValue);
+//            }
+//        });
     }
 
 
